@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thesis Intelligence System</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f8f9fb;
+    padding: 60px 40px;
+    color: #1a1a2e;
+  }
+  h1 {
+    text-align: center;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #8b8fa3;
+    margin-bottom: 48px;
+  }
+
+  .layer-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #a0a4b8;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .section-heading {
+    text-align: center;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #a0a4b8;
+    font-weight: 600;
+    margin-bottom: 16px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* LAYER 1 */
+  .l1-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
+  .l1 {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    border-radius: 16px;
+    padding: 32px 48px;
+    max-width: 520px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(26,26,46,0.18);
+  }
+  .l1 .layer-label { color: rgba(255,255,255,0.45); }
+  .l1 h2 { font-size: 18px; font-weight: 600; line-height: 1.5; }
+  .l1 h2 span { color: #7f8aff; }
+
+  /* Connector lines */
+  .connector-down {
+    display: flex; justify-content: center; margin: 0 auto;
+  }
+  .connector-down svg { display: block; }
+
+  /* LAYER 2 grid */
+  .l2-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+  }
+  .l2-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px 24px 24px;
+    border-left: 4px solid;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+  }
+  .l2-card:nth-child(1) { border-color: #6366f1; }
+  .l2-card:nth-child(2) { border-color: #f59e0b; }
+  .l2-card:nth-child(3) { border-color: #ef4444; }
+  .l2-card:nth-child(4) { border-color: #10b981; }
+  .l2-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+  .l2-card:nth-child(1) .l2-tag { color: #6366f1; }
+  .l2-card:nth-child(2) .l2-tag { color: #f59e0b; }
+  .l2-card:nth-child(3) .l2-tag { color: #ef4444; }
+  .l2-card:nth-child(4) .l2-tag { color: #10b981; }
+  .l2-card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+    margin-bottom: 14px;
+  }
+  .l2-card p {
+    font-size: 13px;
+    color: #6b7085;
+    line-height: 1.55;
+    flex: 1;
+  }
+
+  /* LAYER 3 sub-items */
+  .l3-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .l3-col { display: flex; flex-direction: column; gap: 12px; }
+  .l3-col .col-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #b0b4c8;
+    font-weight: 600;
+    margin-bottom: 4px;
+    padding-left: 2px;
+  }
+  .l3-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-top: 3px solid;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    position: relative;
+  }
+  .l3-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .l3-card.open { transform: none; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .l3-col:nth-child(1) .l3-card { border-color: #6366f1; }
+  .l3-col:nth-child(2) .l3-card { border-color: #f59e0b; }
+  .l3-col:nth-child(3) .l3-card { border-color: #ef4444; }
+  .l3-col:nth-child(4) .l3-card { border-color: #10b981; }
+  .l3-card .l3-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .l3-card .l3-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .l3-col:nth-child(1) .l3-tag { color: #6366f1; }
+  .l3-col:nth-child(2) .l3-tag { color: #f59e0b; }
+  .l3-col:nth-child(3) .l3-tag { color: #ef4444; }
+  .l3-col:nth-child(4) .l3-tag { color: #10b981; }
+  .l3-card .chevron {
+    font-size: 14px;
+    color: #b0b4c8;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+    margin-left: 8px;
+    margin-top: 2px;
+  }
+  .l3-card.open .chevron { transform: rotate(180deg); }
+  .l3-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+  .l3-card p {
+    font-size: 12px;
+    color: #6b7085;
+    line-height: 1.5;
+  }
+  /* Expandable companies panel */
+  .l3-companies {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, margin-top 0.3s ease, padding 0.3s ease;
+    margin-top: 0;
+  }
+  .l3-card.open .l3-companies {
+    max-height: 600px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+  }
+  .l3-companies .companies-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #b0b4c8;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .l3-companies .company-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .company-chip {
+    background: #f5f6fa;
+    border: 1px solid #e2e4ea;
+    border-radius: 8px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #3a3d52;
+    white-space: nowrap;
+  }
+  .l3-col:nth-child(1) .company-chip { background: #eef0ff; border-color: #d4d7ff; color: #4f46e5; }
+  .l3-col:nth-child(2) .company-chip { background: #fef9ee; border-color: #fde6a8; color: #b45309; }
+  .l3-col:nth-child(3) .company-chip { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+  .l3-col:nth-child(4) .company-chip { background: #ecfdf5; border-color: #a7f3d0; color: #059669; }
+  .company-chip.empty {
+    background: transparent;
+    border-style: dashed;
+    color: #b0b4c8;
+    font-style: italic;
+  }
+  /* Budget section */
+  .l3-budget {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  .budget-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #b0b4c8;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .budget-total {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .l3-col:nth-child(1) .budget-total { color: #6366f1; }
+  .l3-col:nth-child(2) .budget-total { color: #f59e0b; }
+  .l3-col:nth-child(3) .budget-total { color: #ef4444; }
+  .l3-col:nth-child(4) .budget-total { color: #10b981; }
+  .budget-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px solid #f5f5f7;
+    gap: 8px;
+  }
+  .budget-item:last-child { border-bottom: none; }
+  .budget-item-name {
+    font-size: 11px;
+    color: #3a3d52;
+    line-height: 1.4;
+    flex: 1;
+  }
+  .budget-item-name .budget-code {
+    display: block;
+    font-size: 9px;
+    color: #b0b4c8;
+    font-family: monospace;
+    margin-top: 2px;
+  }
+  .budget-item-amount {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a1a2e;
+    white-space: nowrap;
+  }
+  .budget-item-name a {
+    color: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+  }
+  .budget-item-name a:hover { color: #6366f1; }
+
+  a.company-chip {
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  a.company-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  /* Connector fan */
+  .fan-connector {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    height: 60px;
+    position: relative;
+    max-width: 1200px;
+  }
+  .fan-connector svg { width: 100%; height: 60px; }
+
+  .small-connector {
+    display: flex; justify-content: center; height: 30px;
+  }
+  .small-connector svg { height: 30px; }
+
+  /* Examples row */
+  .examples-row {
+    max-width: 1200px;
+    margin: 16px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .example-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 2px;
+  }
+  .example-chip {
+    background: #fff;
+    border: 1px solid #e2e4ea;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: #5a5e73;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<h1>Thesis Intelligence System</h1>
+
+<!-- LAYER 1 -->
+<div class="l1-wrapper">
+  <div class="l1">
+    <div class="layer-label">Layer 1 &mdash; Broad Conviction</div>
+    <h2>Warfare and security are becoming <span>autonomous</span>, <span>distributed</span> and <span>software-defined</span> (sensors)</h2>
+  </div>
+</div>
+
+<!-- Fan connector from L1 to L2 -->
+<div class="fan-connector">
+  <svg viewBox="0 0 1200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="600" y1="0" x2="150" y2="60" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="6 4"/>
+    <line x1="600" y1="0" x2="450" y2="60" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="6 4"/>
+    <line x1="600" y1="0" x2="750" y2="60" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="6 4"/>
+    <line x1="600" y1="0" x2="1050" y2="60" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="6 4"/>
+    <circle cx="600" cy="0" r="4" fill="#cbd0e0"/>
+    <circle cx="150" cy="60" r="4" fill="#6366f1"/>
+    <circle cx="450" cy="60" r="4" fill="#f59e0b"/>
+    <circle cx="750" cy="60" r="4" fill="#ef4444"/>
+    <circle cx="1050" cy="60" r="4" fill="#10b981"/>
+  </svg>
+</div>
+
+<!-- LAYER 2 -->
+<div class="section-heading">Layer 2 &mdash; Impact Areas</div>
+<div class="l2-grid">
+  <div class="l2-card">
+    <div class="l2-tag">1.a &mdash; Unmanned Systems</div>
+    <h3>Attritable unmanned systems across air, land, sea & subsea</h3>
+    <p>Will structurally complement and partially displace legacy platforms</p>
+  </div>
+  <div class="l2-card">
+    <div class="l2-tag">1.b &mdash; Energy & Logistics</div>
+    <h3>Energy density and field logistics are performance bottlenecks</h3>
+    <p>Critical constraints limiting range, endurance and operational tempo of unmanned fleets</p>
+  </div>
+  <div class="l2-card">
+    <div class="l2-tag">1.c &mdash; Counter-Unmanned</div>
+    <h3>Counter-unmanned detection & neutralization as a permanent defensive layer</h3>
+    <p>Both kinetic and non-kinetic defence capabilities will be essential</p>
+  </div>
+  <div class="l2-card">
+    <div class="l2-tag">1.d &mdash; HMI & Autonomy</div>
+    <h3>Low-latency, high-trust HMI and supervised autonomy frameworks</h3>
+    <p>Currently underserved &mdash; decreasing operator load as fast as possible with technology</p>
+  </div>
+</div>
+
+<!-- Small connectors to L3 -->
+<div class="examples-row" style="margin-bottom: 0;">
+  <div class="small-connector"><svg viewBox="0 0 40 30"><line x1="20" y1="0" x2="20" y2="30" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="4 3"/></svg></div>
+  <div class="small-connector"><svg viewBox="0 0 40 30"><line x1="20" y1="0" x2="20" y2="30" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="4 3"/></svg></div>
+  <div class="small-connector"><svg viewBox="0 0 40 30"><line x1="20" y1="0" x2="20" y2="30" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="4 3"/></svg></div>
+  <div class="small-connector"><svg viewBox="0 0 40 30"><line x1="20" y1="0" x2="20" y2="30" stroke="#cbd0e0" stroke-width="2" stroke-dasharray="4 3"/></svg></div>
+</div>
+
+<!-- LAYER 3 — Problem Statements -->
+<div class="section-heading" style="margin-top: 8px;">Layer 3 &mdash; Problem Statements</div>
+<div class="l3-section">
+  <!-- 1.a problems -->
+  <div class="l3-col">
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.a.a</div><span class="chevron">&#9660;</span></div>
+      <h4>The detection gap</h4>
+      <p>Identifying low-observable, low-cost threats before they reach the defended asset</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <a class="company-chip" href="https://www.robinradar.com/" target="_blank">Robin Radar (NL)</a>
+          <a class="company-chip" href="https://www.hensoldt.net/" target="_blank">Hensoldt (DE)</a>
+          <a class="company-chip" href="https://www.aveillant.com/" target="_blank">Aveillant (UK)</a>
+          <a class="company-chip" href="https://www.sqhead.com/" target="_blank">Squarehead Tech (NO)</a>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;30M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">Layered critical seabed infrastructure protection<span class="budget-code">EDF-2026-LS-RA-SI-UWW-CSBI</span></div>
+            <div class="budget-item-amount">&euro;30M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.a.b</div><span class="chevron">&#9660;</span></div>
+      <h4>Intercept economics</h4>
+      <p>You cannot shoot a &pound;200 drone with a &pound;200k missile indefinitely</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <a class="company-chip" href="https://www.droneshield.com/" target="_blank">DroneShield (AU/UK)</a>
+          <a class="company-chip" href="https://openworksengineering.com/" target="_blank">OpenWorks Eng (UK)</a>
+          <a class="company-chip" href="https://www.epirusinc.com/" target="_blank">Epirus (US/EU ops)</a>
+          <a class="company-chip" href="https://blighter.com/" target="_blank">Blighter (UK)</a>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&mdash;</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name" style="color: #b0b4c8; font-style: italic;">No directly mapped EDF programme &mdash; cost-per-engagement is a capability design problem, not a standalone funding line</div>
+            <div class="budget-item-amount"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.a.c</div><span class="chevron">&#9660;</span></div>
+      <h4>Classification &amp; response latency</h4>
+      <p>Humans cannot make intercept decisions fast enough in a swarm environment</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <a class="company-chip" href="https://sentientvision.com/" target="_blank">Sentient Vision (AU/EU)</a>
+          <a class="company-chip" href="https://helsing.ai/" target="_blank">Helsing (DE)</a>
+          <a class="company-chip" href="https://www.preligens.com/" target="_blank">Preligens (FR)</a>
+          <a class="company-chip" href="https://www.anduril.com/" target="_blank">Anduril (US/UK)</a>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;30M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">AI-based tactical swarms (automated classification &amp; response)<span class="budget-code">EDF-2026-LS-RA-CHALLENGE-DIGIT-AISAP/AO</span></div>
+            <div class="budget-item-amount">&euro;30M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.b problems -->
+  <div class="l3-col">
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.b.a</div><span class="chevron">&#9660;</span></div>
+      <h4>Payload-range-endurance trilemma</h4>
+      <p>Energy density forces impossible mission trade-offs</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;40M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">High-performance energy systems<span class="budget-code">EDF-2026-DA-ENERENV-HPES</span></div>
+            <div class="budget-item-amount">&euro;20M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">New turbofan engine 25-35 kN<span class="budget-code">EDF-2026-LS-RA-SI-ENERENV-NTFE</span></div>
+            <div class="budget-item-amount">&euro;20M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.b.b</div><span class="chevron">&#9660;</span></div>
+      <h4>The sortie rate ceiling</h4>
+      <p>Unmanned fleets grounded by recharge and refuel cycles</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;100K/co</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name"><a href="https://www.nato.int/cps/en/natohq/news_231338.htm" target="_blank">NATO DIANA Energy &amp; Power Challenge</a><span class="budget-code">70+ companies in 2025 cohort</span></div>
+            <div class="budget-item-amount">&euro;100K/co</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.b.c</div><span class="chevron">&#9660;</span></div>
+      <h4>Forward power as a high-value target</h4>
+      <p>Centralised energy infrastructure creates critical vulnerability</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;20M+</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">High-performance energy systems<span class="budget-code">EDF-2026-DA-ENERENV-HPES</span></div>
+            <div class="budget-item-amount">&euro;20M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name"><a href="https://www.nato.int/cps/en/natohq/news_231338.htm" target="_blank">NATO DIANA Energy &amp; Power Challenge</a><span class="budget-code">Distributed power &amp; resilience focus</span></div>
+            <div class="budget-item-amount">&euro;100K/co</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.c problems -->
+  <div class="l3-col">
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.c.a</div><span class="chevron">&#9660;</span></div>
+      <h4>Engagement bandwidth bottleneck</h4>
+      <p>Fewer interceptors than threats, forcing prioritisation under uncertainty</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;150M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">High-end endo-atmospheric interception<span class="budget-code">EDF-2026-DA-ACC-AIRDEF-EATMI</span></div>
+            <div class="budget-item-amount">&euro;100M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">Galileo navigation for effectors (precision guidance)<span class="budget-code">EDF-2026-DA-SPACE-PRS</span></div>
+            <div class="budget-item-amount">&euro;50M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.c.b</div><span class="chevron">&#9660;</span></div>
+      <h4>The sensor fusion gap</h4>
+      <p>Integrating RF, radar &amp; EO/IR data in real-time to maintain air picture in contested EM environments</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;73M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">Enhanced cognitive electronic warfare<span class="budget-code">EDF-2026-DA-SENS-CEW</span></div>
+            <div class="budget-item-amount">&euro;24M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">Multidomain sensors demonstrator &amp; test<span class="budget-code">EDF-2026-RA-SENS-MSDT</span></div>
+            <div class="budget-item-amount">&euro;20M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">Over-the-horizon sensing<span class="budget-code">EDF-2026-LS-DA-DIS-OTHR</span></div>
+            <div class="budget-item-amount">&euro;29M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.c.c</div><span class="chevron">&#9660;</span></div>
+      <h4>The false alarm cost</h4>
+      <p>Every engagement uses ammo and reveals position; high false-positive rates degrade defence and opsec</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;44M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">Cognitive EW (signal analysis, false-positive reduction)<span class="budget-code">EDF-2026-DA-SENS-CEW</span></div>
+            <div class="budget-item-amount">&euro;24M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">Multidomain sensors (detection &amp; tracking accuracy)<span class="budget-code">EDF-2026-RA-SENS-MSDT</span></div>
+            <div class="budget-item-amount">&euro;20M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.d problems -->
+  <div class="l3-col">
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.d.a</div><span class="chevron">&#9660;</span></div>
+      <h4>Denied-environment navigation collapse</h4>
+      <p>Operating blind when GPS and comms are jammed</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;30M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">AI-based tactical swarms (GPS-denied autonomy)<span class="budget-code">EDF-2026-LS-RA-CHALLENGE-DIGIT-AISAP/AO</span></div>
+            <div class="budget-item-amount">&euro;30M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.d.b</div><span class="chevron">&#9660;</span></div>
+      <h4>Mass without logistics</h4>
+      <p>The attrition-tolerant strike and surveillance network</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;165M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">Future main battle tank (reduced crew, unmanned ops)<span class="budget-code">EDF-2026-DA-GROUND-MBT</span></div>
+            <div class="budget-item-amount">&euro;125M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">Military multi-domain operations cloud<span class="budget-code">EDF-2026-DA-EXP-DIGIT-MDOC</span></div>
+            <div class="budget-item-amount">&euro;40M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l3-card" onclick="this.classList.toggle('open')">
+      <div class="l3-header"><div class="l3-tag">1.d.c</div><span class="chevron">&#9660;</span></div>
+      <h4>Swarm coordination without a conductor</h4>
+      <p>Decentralised command in comms-degraded environments</p>
+      <div class="l3-companies">
+        <div class="companies-label">Related Companies</div>
+        <div class="company-chips">
+          <span class="company-chip empty">+ Add companies</span>
+        </div>
+        <div class="l3-budget">
+          <div class="budget-label">EDF 2026 Budget <span class="budget-total">&euro;46.5M</span></div>
+          <div class="budget-item">
+            <div class="budget-item-name">AI framework for military decision-making<span class="budget-code">EDF-2026-RA-SIMTRAIN-MSAI</span></div>
+            <div class="budget-item-amount">&euro;16M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name">AI-based tactical swarms (reduced operator load)<span class="budget-code">EDF-2026-LS-RA-CHALLENGE-DIGIT-AISAP/AO</span></div>
+            <div class="budget-item-amount">&euro;30M</div>
+          </div>
+          <div class="budget-item">
+            <div class="budget-item-name"><a href="https://www.sto.nato.int/ocs/nato-chief-scientist-grants-programme/" target="_blank">NATO Chief Scientist Grants</a><span class="budget-code">HMI design, cognitive workload, alt control tech</span></div>
+            <div class="budget-item-amount">&euro;0.5M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
